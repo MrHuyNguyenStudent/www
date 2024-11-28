@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -138,4 +139,53 @@ public class AuthController {
         return ResponseEntity.ok("Xác thực OTP thành công!");
     }
 
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest request) {
+        try {
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            TaiKhoan taiKhoan = taiKhoanService.findByUsername(username);
+            if (taiKhoan == null) {
+                return ResponseEntity.status(404).body("Tài khoản không tồn tại");
+            }
+            if (!passwordEncoder.matches(request.getOldPassword(), taiKhoan.getPassword())) {
+                return ResponseEntity.badRequest().body("Mật khẩu cũ không chính xác");
+            }
+            taiKhoan.setPassword(passwordEncoder.encode(request.getNewPassword()));
+            taiKhoanService.updateTaiKhoan(taiKhoan.getId(), taiKhoan);
+            return ResponseEntity.ok("Đổi mật khẩu thành công");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Đã xảy ra lỗi khi đổi mật khẩu");
+        }
+    }
+    @PostMapping("/forgot-password/request-otp")
+    public ResponseEntity<?> requestForgotPasswordOTP(@RequestBody OtpRequest otpRequest) {
+        String phone = otpRequest.getPhone();
+        KhachHang khachHang = khachHangService.findBySDT(phone);
+        if (khachHang == null) {
+            return ResponseEntity.badRequest().body("Số điện thoại không tồn tại trong hệ thống.");
+        }
+        String otp = otpRepository.generateOTP(phone);
+        log.info("OTP cho số điện thoại {} là: {}", phone, otp);
+
+        return ResponseEntity.ok(otp);
+    }
+
+    @PostMapping("/forgot-password/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest request) {
+        String phone = request.getPhone();
+        String newPassword = request.getNewPassword();
+        KhachHang khachHang = khachHangService.findBySDT(phone);
+        if (khachHang == null) {
+            return ResponseEntity.status(404).body("Tài khoản không tồn tại.");
+        }
+        TaiKhoan taiKhoan = khachHang.getTaiKhoan();
+        if (taiKhoan == null) {
+            return ResponseEntity.status(404).body("Tài khoản không tồn tại.");
+        }
+        taiKhoan.setPassword(passwordEncoder.encode(newPassword));
+        taiKhoanService.updateTaiKhoan(taiKhoan.getId(),taiKhoan);
+
+        return ResponseEntity.ok("Đặt lại mật khẩu thành công.");
+    }
 }

@@ -45,9 +45,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Vô hiệu hóa CSRF
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/auth/login", "/api/auth/register/**", "/api/auth/request-otp","/api/auth/confirm-otp","/api/auth/forgot-password/request-otp",
+                                "/api/auth/forgot-password/reset-password").permitAll() // Các endpoint không cần token
                         .requestMatchers(HttpMethod.GET, "/api/tours").permitAll()
                         .requestMatchers(
                                 "/v3/api-docs/**",
