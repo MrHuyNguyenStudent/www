@@ -18,4 +18,7 @@ public class KhachHangService {
     public KhachHang themKhachHang(KhachHang khachHang) {
         return khachHangRepository.save(khachHang);
     }
+    public KhachHang findBySDT(String phone) {
+        return khachHangRepository.findBySoDienThoai(phone);
+    }
 }

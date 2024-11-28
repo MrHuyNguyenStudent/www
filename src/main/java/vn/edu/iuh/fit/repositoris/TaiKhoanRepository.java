@@ -5,4 +5,5 @@ import vn.edu.iuh.fit.models.TaiKhoan;
 @Repository
 public interface TaiKhoanRepository extends JpaRepository<TaiKhoan, Integer> {
     TaiKhoan findByUsername(String username);
+
 }

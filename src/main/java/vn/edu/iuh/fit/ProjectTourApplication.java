@@ -21,13 +21,6 @@ public class ProjectTourApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Test TaiKhoanService sau khi Spring khởi tạo
-        UserDetails user = taiKhoanService.loadUserByUsername("huyhung");
-        System.out.println("User found: " + user);
 
-//       BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-//        String rawPassword = "123456"; // Mật khẩu gốc
-//        String encodedPassword = encoder.encode(rawPassword); // Mã hóa mật kh ẩu
-//        System.out.println(encodedPassword); // In ra mật khẩu đã mã hóa
     }
 }

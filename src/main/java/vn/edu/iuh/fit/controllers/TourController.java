@@ -4,6 +4,7 @@ package vn.edu.iuh.fit.controllers;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.iuh.fit.DTO.TourDTO;
 import vn.edu.iuh.fit.models.Tour;

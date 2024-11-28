@@ -6,5 +6,5 @@ import vn.edu.iuh.fit.models.KhachHang;
 @Repository
 public interface KhachHangRepository extends CrudRepository<KhachHang, Integer> {
     KhachHang findByEmail(String email);
-    KhachHang findBySoDienThoai(String soDienThoai);
+    KhachHang findBySoDienThoai(String phone);
 }
