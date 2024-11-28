@@ -1,4 +1,4 @@
-package vn.edu.iuh.fit.DTO;
+package vn.edu.iuh.fit.jwt;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LoginResponse {
+public class JwtResponse {
     private String accessToken;
     private String refreshToken;
 }
